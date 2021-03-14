@@ -22,6 +22,6 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         context: ./backend
-        dockerfile: Dockerfile.prod
+        file: Dockerfile.prod
         push: true
         tags: manedurphy/review-service-backend:latest
