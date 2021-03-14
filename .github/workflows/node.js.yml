@@ -31,7 +31,7 @@ jobs:
       run: cd backend && npm i && npm test
 
       env:
-        DB: reviews
+        PG_DB: reviews
         PG_USER: user
         PG_PASSWORD: password
         HOST: localhost
