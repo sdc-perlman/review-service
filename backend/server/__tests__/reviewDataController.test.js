@@ -3,15 +3,14 @@ const db = require('../db/index');
 const request = require('supertest');
 const app = require('../server');
 
-let server;
+let server = app.listen(5003, () => console.log('Test server started'));
 
 beforeAll(async () => {
-    server = app.listen(5003, () => console.log('Test server started'));
     await db.sync();
 });
 
 afterAll(async () => {
-    await server.close();
+    server.close();
     await db.close();
 });
 

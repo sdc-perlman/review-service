@@ -7,7 +7,7 @@ const httpResponses = require('../constants/httpResponses');
 const validationResponses = require('../constants/validationResponses');
 const Review = require('../db/models/Review');
 
-let server;
+const server = app.listen(5003, () => console.log('Test server started'));;
 let user_id;
 let review_id;
 
@@ -21,11 +21,10 @@ beforeAll(async () => {
     });
 
     user_id = user.id;
-    server = app.listen(5003, () => console.log('Test server started'));
 });
 
 afterAll(async () => {
-    await server.close();
+    server.close();
     await User.destroy({ where: { first_name: 'Test', last_name: 'User' } });
     await db.close();
 });
