@@ -12,6 +12,7 @@ let user_id;
 let review_id;
 
 beforeAll(async () => {
+    await db.sync();
     const user = await User.create({
         first_name: 'Test',
         last_name: 'User',
@@ -21,7 +22,6 @@ beforeAll(async () => {
 
     user_id = user.id;
     server = app.listen(5003, () => console.log('Test server started'));
-    await db.sync();
 });
 
 afterAll(async () => {
