@@ -1,11 +1,13 @@
-name: Node CI
+name: Test runner
 
 on:
   pull_request:
     branches: [ master ]
 
 jobs:
-  build:
+  run-tests:
+    runs-on: ubuntu-latest
+
     services:
       postgres:
         image: postgres
@@ -14,21 +16,23 @@ jobs:
           POSTGRES_PASSWORD: password
           POSTGRES_DB: reviews
         ports:
-          - "5432:5432"
-
-
-  run-tests:
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [15.x]
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: cd backend && npm i
-    - run: npm test
+    - name: Checkout repo code
+      uses: actions/checkout@v2
+
+    - name: Install deps and run tests
+      run: cd backend && npm i
+      run: npm test
+
+      env:
+        DB: test
+        PG_USER: user
+        PG_PASSWORD: password
+        HOST: localhost
