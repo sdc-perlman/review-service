@@ -7,6 +7,7 @@ let server;
 
 beforeAll(async () => {
     server = app.listen(5003, () => console.log('Test server started'));
+    await db.sync();
 });
 
 afterAll(async () => {

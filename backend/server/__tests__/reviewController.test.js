@@ -21,6 +21,7 @@ beforeAll(async () => {
 
     user_id = user.id;
     server = app.listen(5003, () => console.log('Test server started'));
+    await db.sync();
 });
 
 afterAll(async () => {
@@ -30,6 +31,17 @@ afterAll(async () => {
 });
 
 describe('/api/reviews/all/:space', () => {
+    test('POST should create a new review', async () => {
+        const review = { rating: 5, content: 'Here is a new review' };
+        const res = await request(app).post('/api/reviews/all/1').send(review).set('user_id', user_id);
+
+        review_id = res.body.id; // for PUT test
+
+        expect(res.status).toBe(201);
+        expect(res.body.rating).toBe(5);
+        expect(res.body.content).toBe('Here is a new review');
+    });
+
     test('GET should reviews an array of reviews for the in the requests parameters', async () => {
         const res = await request(app).get('/api/reviews/all/1');
 
@@ -41,17 +53,6 @@ describe('/api/reviews/all/:space', () => {
         expect(res.body.reviews[0]).toHaveProperty('user');
         expect(res.body.reviews[0].user).toHaveProperty('first_name');
         expect(res.body.reviews[0].user).toHaveProperty('last_name');
-    });
-
-    test('POST should create a new review', async () => {
-        const review = { rating: 5, content: 'Here is a new review' };
-        const res = await request(app).post('/api/reviews/all/1').send(review).set('user_id', user_id);
-
-        review_id = res.body.id; // for PUT test
-
-        expect(res.status).toBe(201);
-        expect(res.body.rating).toBe(5);
-        expect(res.body.content).toBe('Here is a new review');
     });
 
     test('POST should NOT create a new review without the user_id', async () => {
