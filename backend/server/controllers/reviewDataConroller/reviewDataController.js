@@ -10,7 +10,6 @@ router.get('/:space', async (req, res) => {
 
         return res.status(200).json(reviewData);
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: serverError });
     }
 });
