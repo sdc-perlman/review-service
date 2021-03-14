@@ -2,9 +2,9 @@ require('../db/relationships');
 const db = require('../db/index');
 const request = require('supertest');
 const app = require('../server');
-const User = require('../db/models/User');
 const httpResponses = require('../constants/httpResponses');
 const validationResponses = require('../constants/validationResponses');
+const User = require('../db/models/User');
 const Review = require('../db/models/Review');
 
 const server = app.listen(5003, () => console.log('Test server started'));;

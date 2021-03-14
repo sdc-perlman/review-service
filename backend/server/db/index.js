@@ -6,6 +6,4 @@ const sequelize = new Sequelize(process.env.PG_DB, process.env.PG_USER, process.
     logging: false,
 });
 
-sequelize.authenticate();
-
 module.exports = sequelize;
