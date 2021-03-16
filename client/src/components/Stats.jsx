@@ -32,7 +32,7 @@ export default ({ reviewInfo = null }) => {
   return (
     <div className="reviews-section-stats">
       <span className="fas fa-sm fa-star star"></span>
-      { avg.slice(0, 3) } <span className="grey-line">|</span> { reviewCount } Google reviews
+      { avg ? avg.slice(0, 3) : 0 } <span className="grey-line">|</span> { reviewCount } Google reviews
     </div>
   );
 
