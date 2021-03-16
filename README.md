@@ -45,7 +45,7 @@ cat dumps/head.sql dumps/copyReviews.sql dumps/reviewsBody0.sql dumps/copyUsers.
 4. Once the "dump.sql" file is created, from the root directory of the project in your terminal, run the command "docker-compose --build up pg". This will read the "pg" service in the "docker-compose.yaml" file and only build that image and run a container, while ignoring the other services. Once the image is build, the Postgres container will see the "dump.sql" file and begin copying the information to the database. This process should take very little time if you set the number of iterations to 0 or 1 earlier. You will notice the creation of another folder called "pg" in the root directory of the project, which is just a volume to persist the data that was seeded so that you do not need to seed the database when stopping and restarting a Postgres container.
 
 
-### Running the Postgres container
+### Running the Postgres container (do this before the next step)
 From the rootdir, enter in your terminal
 ```console
 docker-compose --build up pg
@@ -56,10 +56,10 @@ NOTE: The initial copying of the dump.sql may take a little time, but all subseq
 docker-compose down
 ```
 
-### Running the Repository
+### Running the Repository 
 To run each aspect of the repository in containers, just run
 ```console
-docker-compose --build up
+docker-compose --build up pg server client
 ```
 
 NOTE: Postgres has the "out-of-box" capability of generating a dump.sql file to back up existing databases. The entire strategy of this data generation script was to create a file using the same syntax as a native pg_dump file, as these scripts follow several recommendations from the Postgres documentation on speeding up the process of seeding large datasets. More can be read [here](https://www.postgresql.org/docs/9.1/populate.html)

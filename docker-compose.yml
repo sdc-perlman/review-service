@@ -2,17 +2,14 @@ version: "3.8"
 
 services:
     
-  app:
-    container_name: reviews
+  server:
+    container_name: server
     restart: always
     build:
       context: ./backend
       dockerfile: Dockerfile
     volumes:
-      - ./backend:/app
-      - /app/dumps/
-      - /app/dataGeneration/
-      - /app/node_modules
+      - ./backend/server:/app/server
     environment: 
       PG_DB: reviews
       PG_USER: user
@@ -47,7 +44,7 @@ services:
     environment: 
       NODE_ENV: production
     depends_on: 
-      - app
+      - server
 
 
 volumes:
