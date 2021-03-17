@@ -1,0 +1,51 @@
+version: "3.8"
+
+services:
+    
+  server:
+    container_name: server
+    restart: always
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend/server:/app/server
+    environment: 
+      PG_DB: reviews
+      PG_USER: user
+      PG_PASSWORD: password
+      HOST: pg
+    ports:
+      - "5002:5002"
+    depends_on: 
+      - pg
+
+  pg:
+    image: postgres
+    container_name: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: reviews
+    volumes:
+      - ./backend/dumps/dump.sql:/docker-entrypoint-initdb.d/docker_postgres_init.sql
+      - pg-data:/var/lib/postgresql/data
+
+  client:
+    container_name: client
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    environment: 
+      NODE_ENV: production
+    depends_on: 
+      - server
+
+
+volumes:
+  pg-data:
