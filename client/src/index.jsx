@@ -1,13 +1,5 @@
-
-import ReviewsContainer from './components/ReviewsContainer.jsx';
+/* eslint-disable react/react-in-jsx-scope */
 import './index.scss';
-import Stats from './components/Stats.jsx';
+import ReviewsService from './components/ReviewService.jsx';
 
-const ReviewsService = () => {
-  return (
-      <ReviewsContainer />
-  );
-};
-
-ReactDOM.render(<ReviewsService />, document.getElementById('reviews'));
-ReactDOM.render(<Stats />, document.getElementById('header-review-stats'));
+ReactDOM.hydrate(<ReviewsService />, document.getElementById('reviews'));

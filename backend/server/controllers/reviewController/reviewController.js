@@ -10,11 +10,12 @@ const { noReviews, serverError } = require('../../constants/httpResponses');
 router.get('/:space', async (req, res) => {
     const repo = new ReviewRepository(req.params.space);
     try {
-        const reviews = await repo.get();
-        if (reviews.length === 0) return res.status(404).json({ message: noReviews });
+        const reviewData = await repo.get();
+        if (reviewData.reviews.length === 0) return res.status(404).json({ message: noReviews });
 
-        return res.status(200).json({ reviews });
+        return res.status(200).json(reviewData);
     } catch (error) {
+        console.log(error);
         return res.status(500).json({ message: serverError });
     }
 });

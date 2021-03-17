@@ -1,77 +1,41 @@
-const { useState } = React;
+/* eslint-disable react/jsx-no-undef */
+/* eslint-disable react/jsx-no-target-blank */
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable react/prop-types */
 import Review from './Review.jsx';
-import { getReviews, getWorkspaceId } from '../actions/index.js';
 
-// This component renders individual views and controls the limit of reviews displayed
-export default ({ reviewsList = null }) => {
-  // unless testing reviewsList will be null, fetches reviews and adds to state
-  // show limits number of displayed reviews up to 9, moreReviews controls if external link is shown
-  const [allReviews, setReviews] = useState(reviewsList);
-  const [show, setShow] = useState(3);
-  const excessReviews = reviewsList && reviewsList.length > 9 ? true : false;
-  const [moreReviews, setMoreReviews] = useState(excessReviews);
+const ReviewList = ({ reviewsList = null }) => {
+    const excessReviews = reviewsList.length > 9 ? true : false;
+    const [show, setShow] = React.useState(3);
 
-  if (allReviews === null) {
-    getReviews(getWorkspaceId())
-      .then(({ data }) => {
-        //simple handling if record does not exist
-        if (data.status === 404) {
-          setReviews([]);
-        } else {
-          const { reviews } = data;
-          if (reviews.length > 9) {
-            setMoreReviews(true);
-          }
-          setReviews(reviews.slice(0,9));
-        }
-      })
-      .catch(() => setReviews(false));
-  }
+    const handleShowMore = () => {
+        if (show < 9) setShow(show + 3);
+    };
 
-  // handle text reveal
-  const handleShowMore = () => {
-    if (show < 9) {
-      setShow(show + 3);
-    }
-  }
-
-  // case handling
-  if (allReviews === null) {
-    return <></>;
-  }
-
-  if (allReviews === false) {
-    return <></>;
-  }
-
-  if (allReviews.length === 0) {
-    return (
-      <></>
+    const SeeAll = () => (
+        <a href="http://google.com" id="reviews-see-all-btn" className="blue-links" target="_blank">
+            See all &#8594;{' '}
+        </a>
     );
-  }
 
-  // external link if total number if reviews exceeds 9 and 9 reviews are currently being displayed
-  const SeeAll = () => (
-    <a href="http://google.com" id="reviews-see-all-btn" className="blue-links" target="_blank">See all &#8594; </a>
-  );
+    const LoadMore = () => (
+        <a id="reviews-load-more-btn" className="blue-links" onClick={handleShowMore}>
+            Load more
+        </a>
+    );
 
-  // increases limit of reviews displayed by 3, up to 9, 
-  // only displays if total reviews is more than current limit, does not display when current limit is 9
-  const LoadMore = () => (
-    <a id="reviews-load-more-btn" className="blue-links" onClick={handleShowMore}>Load more</a>
-  );
+    return (
+        <React.Fragment>
+            {reviewsList.slice(0, show).map((review, i) => (
+                <Review key={i} review={review} />
+            ))}
+            <br />
 
-  // map reviews up to value of show
-  // display buttons to show up to 9 reviews and external link if more than 9 reviews exist
-  return (
-    <>
-      { allReviews.slice(0, show).map((review, i) => <Review key={i} review={review} />)}
-      <br/>
+            {reviewsList.length > show && show < 9 && <LoadMore />}
 
-      { (allReviews.length > show && show < 9) && <LoadMore /> }
-
-      { (moreReviews && show >= 9) && <SeeAll /> }
-    </>
-  );
-
+            {excessReviews && show >= 9 && <SeeAll />}
+        </React.Fragment>
+    );
 };
+
+export default ReviewList;

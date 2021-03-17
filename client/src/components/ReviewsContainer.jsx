@@ -1,36 +1,31 @@
-const { useState } = React;
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable react/prop-types */
 import ReviewsList from './ReviewsList.jsx';
 import Title from './Title.jsx';
 import Stats from './Stats.jsx';
-import { getReviewInfo, getWorkspaceId } from '../actions/index.js';
+import { getReviewsData } from '../actions/index.js';
 
-// container component for review section
-// renders empty on error or no record
-export default ({ exists = null, reviewsList = null, reviewInfo = null }) => {
-  const [recordExists, setExists] = useState(exists);
-  // simple handling for errors and non-existent records
-  if (recordExists === null) {
-    getReviewInfo(getWorkspaceId())
-      .then(({ data }) => {
-        if (data.success === false) {
-          setExists(false);
-        } else {
-          setExists(true);
+const ReviewsContainer = ({ reviewsList = null, reviewInfo = null }) => {
+    const [data, setData] = React.useState({ reviewsList, reviewInfo });
+
+    React.useEffect(() => {
+        if (window.__initialData__) delete window.__initialData__;
+        if (reviewInfo === null) {
+            getReviewsData()
+                .then(({ data }) => {
+                    setData({ reviewInfo: data.reviewInfo, reviewsList: data.reviews });
+                })
+                .catch(() => setData({ reviewsList: [], reviewInfo: { reviewCount: 0, avg: null } }));
         }
-      })
-      .catch(err => setExists(false))
-  }
+    }, []);
 
-  // return empty if error or no record
-  if (recordExists === null || recordExists === false) {
-    return <></>;
-  }
+    return data.reviewInfo ? (
+        <div className="reviews-section-container">
+            <Title />
+            <Stats reviewInfo={data.reviewInfo} />
+            <ReviewsList reviewsList={data.reviewsList} />
+        </div>
+    ) : null;
+};
 
-  return (
-  <div className="reviews-section-container">
-    <Title/>
-    <Stats reviewInfo={reviewInfo}/>
-    <ReviewsList reviewsList={reviewsList}/>
-  </div>
-  );
-;} 
+export default ReviewsContainer;
