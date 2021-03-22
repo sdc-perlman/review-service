@@ -8,17 +8,20 @@ class ReviewRepository {
         this.reviewDataRepository = new ReviewDataRepository(this.space);
     }
 
-    get() {
-        if (this.space != null)
-            return Review.findAll({
-                where: { space: this.space },
-                attributes: ['rating', 'content', 'date'],
-                include: {
-                    model: User,
-                    attributes: ['first_name', 'last_name'],
-                },
-                order: [['date', 'desc']],
-            });
+    async get() {
+        const reviews = await Review.findAll({
+            where: { space: this.space },
+            attributes: ['rating', 'content', 'date'],
+            include: {
+                model: User,
+                attributes: ['first_name', 'last_name'],
+            },
+            order: [['date', 'desc']],
+        });
+
+        const reviewInfo = await this.reviewDataRepository.getBySpace();
+
+        return { reviews, reviewInfo };
     }
 
     create(review) {

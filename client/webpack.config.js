@@ -3,6 +3,7 @@ const PUB = path.resolve(process.env.PWD, 'dist');
 const SRC = path.resolve(process.env.PWD, 'src');
 const CompressionPlugin = require('compression-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
@@ -11,12 +12,13 @@ module.exports = {
     output: {
         path: PUB,
         filename: 'reviews.js',
-        publicPath: '/'
+        publicPath: '/',
     },
     plugins: [
         new CompressionPlugin(),
         new HtmlWebpackPlugin({ template: path.resolve(__dirname, 'public', 'index.html') }),
         new CleanWebpackPlugin(),
+        new MiniCssExtractPlugin(),
     ],
     module: {
         rules: [
@@ -29,7 +31,7 @@ module.exports = {
             {
                 test: /\.scss$/i,
                 exclude: /node_modules/,
-                use: ['style-loader', 'css-loader', 'sass-loader'],
+                use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
             },
         ],
     },
