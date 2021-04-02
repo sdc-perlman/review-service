@@ -1,3 +1,5 @@
+require('newrelic');
+
 const express = require('express');
 const reviewInfoRoutes = require('./controllers/reviewDataConroller/reviewDataController');
 const reviewRoutes = require('./controllers/reviewController/reviewController');
