@@ -1,8 +1,8 @@
-name: Docker CI
+name: Staging CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [ staging ]
 
 jobs:
   build-and-deploy:
@@ -24,4 +24,4 @@ jobs:
         context: ./backend
         file: ./backend/Dockerfile.prod
         push: true
-        tags: manedurphy/reviews-api:latest
+        tags: manedurphy/reviews-api-staging:latest
