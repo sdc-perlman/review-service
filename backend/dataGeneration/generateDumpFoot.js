@@ -13,6 +13,8 @@ ALTER TABLE ONLY public.reviews
     FOREIGN KEY (user_id)
     REFERENCES public.users (id)
     ON DELETE CASCADE;
+
+CREATE INDEX space_idx ON public.reviews USING hash (space);
 `;
 
 fs.writeFile(path.join(__dirname, '..', 'dumps', 'foot.sql'), query, (err) => {

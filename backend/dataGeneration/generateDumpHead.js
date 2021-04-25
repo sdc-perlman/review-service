@@ -26,7 +26,7 @@ CREATE TABLE public.users (
     password varchar(255)
 );
 
-ALTER TABLE public.users OWNER TO "user";
+ALTER TABLE public.users OWNER TO "manedurphy";
 
 
 CREATE TABLE public.reviews (
@@ -39,7 +39,7 @@ CREATE TABLE public.reviews (
 );
 
 
-ALTER TABLE public.reviews OWNER TO "user";
+ALTER TABLE public.reviews OWNER TO "manedurphy";
 `;
 
 fs.writeFile(path.join(__dirname, '..', 'dumps', 'head.sql'), query, (err) => {

@@ -4,7 +4,7 @@ const faker = require('faker');
 const command = require('./command');
 const uuid = require('uuid').v4;
 
-const iterations = 0;
+const iterations = 39;
 const x = 250000;
 
 for (let k = 0; k <= iterations; k++) {
